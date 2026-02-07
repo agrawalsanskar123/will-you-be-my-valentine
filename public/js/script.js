@@ -219,33 +219,65 @@ no_button.addEventListener('click', () => {
         no_button.innerHTML = answers_no[language][i];
         i++;
     } else if (i === total - 1) {
-        alert(answers_no[language][i]);
-        /* ── Full reset ── */
-        i = 1;
-        clicks = 0;
-        no_button.innerHTML = answers_no[language][0];
-        yes_button.innerHTML = answers_yes[language];
-        yes_button.style.height = "50px";
-        yes_button.style.width = "50px";
-        yes_button.style.fontSize = "14px";
-        yes_button.classList.remove('glow');
-        /* Reset escalation classes */
-        removeAllEscalation();
-        yes_button.style.textTransform = '';
-        yes_button.style.letterSpacing = '';
-        yes_button.style.fontWeight = '';
-        /* Reset No button styles */
-        no_button.style.fontSize = '';
-        no_button.style.padding = '';
-        no_button.style.opacity = '';
-        no_button.style.height = '';
-        no_button.style.position = '';
-        no_button.style.left = '';
-        no_button.style.top = '';
-        no_button.style.zIndex = '';
-        no_button.classList.remove('dodging');
-        size = 50;
-        fontSize = 14;
+        /* ── Bee plea: show bee.gif as a last-ditch effort ── */
+        const banner = document.getElementById('banner');
+        const questionHeading = document.getElementById('question-heading');
+        const originalHeading = questionHeading.textContent;
+
+        banner.src = "./bee.gif";
+        refreshBanner();
+
+        const beePleaTexts = {
+            english: "Will you at least BEE my valentine? 🐝",
+            turkish: "En azından arım olur musun? 🐝",
+            emotional_damage: "Even the BEES feel my pain! 🐝💔"
+        };
+        questionHeading.textContent = beePleaTexts[language];
+        questionHeading.classList.add("bee-plea");
+
+        /* Hide buttons during bee plea */
+        const buttonsDiv = document.getElementsByClassName('buttons')[0];
+        buttonsDiv.style.opacity = '0';
+        buttonsDiv.style.pointerEvents = 'none';
+
+        /* After 3 seconds, show alert and reset everything */
+        setTimeout(() => {
+            alert(answers_no[language][i - 1]);
+
+            /* ── Full reset ── */
+            questionHeading.classList.remove("bee-plea");
+            questionHeading.textContent = originalHeading;
+            banner.src = "public/images/mid.gif";
+            refreshBanner();
+            buttonsDiv.style.opacity = '1';
+            buttonsDiv.style.pointerEvents = '';
+
+            i = 1;
+            clicks = 0;
+            no_button.innerHTML = answers_no[language][0];
+            yes_button.innerHTML = answers_yes[language];
+            yes_button.style.height = "50px";
+            yes_button.style.width = "50px";
+            yes_button.style.fontSize = "14px";
+            yes_button.classList.remove('glow');
+            /* Reset escalation classes */
+            removeAllEscalation();
+            yes_button.style.textTransform = '';
+            yes_button.style.letterSpacing = '';
+            yes_button.style.fontWeight = '';
+            /* Reset No button styles */
+            no_button.style.fontSize = '';
+            no_button.style.padding = '';
+            no_button.style.opacity = '';
+            no_button.style.height = '';
+            no_button.style.position = '';
+            no_button.style.left = '';
+            no_button.style.top = '';
+            no_button.style.zIndex = '';
+            no_button.classList.remove('dodging');
+            size = 50;
+            fontSize = 14;
+        }, 3000);
     }
 });
 
