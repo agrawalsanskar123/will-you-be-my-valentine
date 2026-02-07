@@ -1,5 +1,5 @@
+/* ── Slow romantic pink gradient background ── */
 body {
-    background-color: white;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -7,6 +7,86 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    min-height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(
+        135deg,
+        #ffe0ec,
+        #ff8ec4,
+        #ffb6d3,
+        #ffc1e3,
+        #ff6fa3,
+        #ffe0ec
+    );
+    background-size: 400% 400%;
+    animation: gradientDrift 14s ease infinite;
+    color: #5c1a3a;
+}
+
+@keyframes gradientDrift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ── Soft pink vignette overlay ── */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 40%,
+        rgba(180, 30, 80, 0.15) 100%
+    );
+}
+
+/* ── Falling hearts ── */
+.falling-heart {
+    position: fixed;
+    top: -60px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    animation: heartFall var(--duration) var(--delay) linear infinite;
+}
+
+@keyframes heartFall {
+    0% {
+        opacity: 0;
+        transform: translateY(0) rotate(0deg) scale(var(--scale, 1));
+    }
+    5% {
+        opacity: var(--peak-opacity, 0.7);
+    }
+    80% {
+        opacity: var(--peak-opacity, 0.5);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(110vh) rotate(var(--spin, 35deg)) scale(var(--scale, 1));
+    }
+}
+
+/* ── Sparkles (pink tinted) ── */
+.sparkle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(255, 180, 210, 0.9);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    box-shadow: 0 0 6px rgba(255, 100, 150, 0.5);
+    animation: twinkle var(--duration) var(--delay) ease-in-out infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50%      { opacity: var(--peak-opacity, 0.45); transform: scale(1.2); }
 }
 
 .buttons {
@@ -16,17 +96,24 @@ body {
     flex-direction: row;
     align-items: end;
     flex-wrap: wrap;
+    gap: 12px;
 }
 
 #no-button {
-    margin: 0 10px;
+    margin: 0;
     color: white;
-    background-color: red;
-    height: 40px !important;
+    background: linear-gradient(135deg, #e84393, #d63384);
+    height: 40px;
     width: auto;
     border: none;
     cursor: pointer;
     margin-top: 10px;
+    border-radius: 24px;
+    padding: 0 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(232, 67, 147, 0.35);
 
     p {
         margin: 0;
@@ -34,39 +121,252 @@ body {
     }
 }
 
+#no-button:hover {
+    box-shadow: 0 6px 20px rgba(232, 67, 147, 0.55);
+    transform: translateY(-1px);
+}
+
 #yes-button {
-    margin: 0 10px;
+    margin: 0;
     color: white;
     border: none;
-    background-color: green;
+    background: linear-gradient(135deg, #ff6b9d, #c0392b, #ff6b9d);
+    background-size: 200% 200%;
     cursor: pointer;
     height: 40px;
+    transition: all 0.3s ease;
+    border-radius: 24px;
+    padding: 0 20px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 14px rgba(255, 107, 157, 0.4);
 
     p {
         margin: 0;
         object-fit: contain;
+    }
+}
+
+#yes-button:hover {
+    box-shadow: 0 6px 22px rgba(255, 107, 157, 0.6);
+    transform: translateY(-2px);
+}
+
+#yes-button.glow {
+    animation: pulseGlow 1.2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 8px rgba(255, 107, 157, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 28px rgba(255, 107, 157, 0.9), 0 0 56px rgba(255, 50, 120, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 8px rgba(255, 107, 157, 0.4);
+    }
+}
+
+/* ── Yes button escalation phases ── */
+
+@keyframes vibrate {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-1.5px, 1px); }
+    40% { transform: translate(1.5px, -1px); }
+    60% { transform: translate(-1px, -1.5px); }
+    80% { transform: translate(1px, 1.5px); }
+}
+
+/* Phase 1: Slight vibration + existing glow */
+#yes-button.vibrate {
+    animation: pulseGlow 1.2s ease-in-out infinite, vibrate 0.3s linear infinite;
+}
+
+/* Phase 2: Ridiculous glow */
+#yes-button.mega-glow {
+    background: linear-gradient(135deg, #ff1a6d, #ff4081, #ff1a6d);
+    background-size: 200% 200%;
+    animation: megaPulse 0.8s ease-in-out infinite, vibrate 0.2s linear infinite;
+}
+
+@keyframes megaPulse {
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(255, 80, 130, 0.6),
+                    0 0 30px rgba(255, 40, 100, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(255, 80, 130, 1),
+                    0 0 80px rgba(255, 40, 100, 0.7),
+                    0 0 120px rgba(255, 0, 80, 0.3);
+    }
+}
+
+/* Phase 3: Ultra glow + faster vibration */
+#yes-button.ultra-glow {
+    background: linear-gradient(135deg, #ff0055, #ff1744, #ff6b9d, #ff0055);
+    background-size: 300% 300%;
+    animation: ultraPulse 0.5s ease-in-out infinite, vibrate 0.12s linear infinite, bgShift 3s ease infinite;
+}
+
+@keyframes ultraPulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 50, 100, 0.8),
+                    0 0 50px rgba(255, 20, 70, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 50px rgba(255, 50, 100, 1),
+                    0 0 100px rgba(255, 20, 70, 0.8),
+                    0 0 160px rgba(255, 0, 60, 0.4);
+    }
+}
+
+@keyframes bgShift {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+}
+
+/* Phase 4: FINAL FORM — Yes button achieves ultimate power */
+#yes-button.final-form {
+    background: linear-gradient(135deg, #ff0044, #ff0066, #e6003a, #ff1744);
+    background-size: 400% 400%;
+    animation: finalPulse 0.3s ease-in-out infinite, vibrate 0.08s linear infinite, bgShift 1.5s ease infinite;
+    border-radius: 32px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+@keyframes finalPulse {
+    0%, 100% {
+        box-shadow: 0 0 30px rgba(255, 0, 68, 0.9),
+                    0 0 60px rgba(255, 0, 80, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 60px rgba(255, 0, 68, 1),
+                    0 0 120px rgba(255, 0, 80, 0.8),
+                    0 0 200px rgba(255, 0, 50, 0.5),
+                    0 0 300px rgba(200, 0, 40, 0.2);
+    }
+}
+
+#no-button.shake {
+    animation: shakeNo 0.4s ease-in-out;
+}
+
+@keyframes shakeNo {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(3px); }
+    100% { transform: translateX(0); }
+}
+
+/* ── No button dodge mode ── */
+#no-button.dodging {
+    transition: none !important;
+    animation: dodgePop 0.25s ease-out forwards;
+}
+
+@keyframes dodgePop {
+    0% {
+        transform: scale(0.3) rotate(-12deg);
+        opacity: 0.15;
+    }
+    60% {
+        transform: scale(1.18) rotate(3deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
     }
 }
 
 /* Make responsive for mobile */
 @media (max-width: 768px) {
     body {
-        padding: 0 20px;
+        padding: 10px 12px;
+    }
+
+    .container {
+        padding: 24px 18px;
+        width: 94%;
     }
 }
 
+/* ── Card with pink frosted-glass backdrop blur ── */
 .container {
+    position: relative;
+    z-index: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     margin-top: 20px;
-    padding: 20px;
+    padding: 32px 28px;
     text-align: center;
+    background: rgba(255, 228, 240, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 182, 211, 0.5);
+    box-shadow: 0 8px 40px rgba(255, 100, 150, 0.15),
+                0 2px 12px rgba(255, 100, 150, 0.08);
+    max-width: 480px;
+    width: 90%;
+}
+
+h1 {
+    color: #c0245e;
+    text-shadow: 0 1px 8px rgba(255, 100, 150, 0.2);
+}
+
+/* ── Emotional Damage dramatic heading ── */
+h1.dramatic {
+    color: #8b0000;
+    text-shadow: 0 0 12px rgba(139, 0, 0, 0.5), 0 0 30px rgba(200, 0, 50, 0.25);
+    animation: dramaticPulse 1.6s ease-in-out infinite, dramaticShake 0.6s ease-in-out infinite;
+    font-style: italic;
+}
+
+@keyframes dramaticPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(1.08); opacity: 0.85; }
+}
+
+@keyframes dramaticShake {
+    0%, 100% { translate: 0 0; }
+    25%      { translate: -2px 1px; }
+    50%      { translate: 2px -1px; }
+    75%      { translate: -1px -1px; }
 }
 
 .message {
     display: none;
+}
+
+.message h2 {
+    color: #d63384;
+}
+
+.distance-message {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #e75480;
+    font-style: italic;
+    letter-spacing: 0.5px;
+}
+
+.srk-gif {
+    margin-top: 20px;
+}
+
+.srk-gif img {
+    width: auto;
+    height: 250px;
+    border-radius: 10px;
 }
 
 .banner-gif {
@@ -89,31 +389,43 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
+    color: #8b2252;
 }
 
 .language-selector label {
     margin-right: 10px;
+    font-weight: 600;
 }
 
 .language-selector select {
-    padding: 5px;
-    border: 1px solid #ccc;
+    padding: 6px 12px;
+    border: 1px solid #f0a0c0;
+    border-radius: 10px;
     font-size: 16px;
+    background: rgba(255, 240, 245, 0.8);
+    color: #8b2252;
+    outline: none;
+    cursor: pointer;
+}
+
+.language-selector select:focus {
+    border-color: #e75480;
+    box-shadow: 0 0 8px rgba(231, 84, 128, 0.3);
 }
 
 .creator {
     text-decoration: none;
-    color: #333;
+    color: #c0245e;
 }
 
 .creator:visited {
     text-decoration: none;
-    color: #333;
+    color: #c0245e;
 }
 
 .creator:hover {
     text-decoration: underline;
-    color: #555;
+    color: #e75480;
 }
 
 /* CSS For Mobile */
